@@ -1,10 +1,5 @@
 # Docker Assignment - Full Stack Application
 
-**Student:** [Your Name]  
-**Course:** [Course Name]  
-**Assignment:** Docker Containerization Project  
-**Date:** [Current Date]
-
 ## 📋 Project Overview
 
 This project demonstrates a complete full-stack application containerized with Docker, featuring a **Flask backend** served by **Gunicorn** and a **Nginx frontend** with reverse proxy configuration. The application showcases modern DevOps practices including health checks, production-ready configurations, and proper service orchestration.
@@ -102,9 +97,7 @@ docker compose up --build
 - **Custom Network**: Isolated service communication
 - **Restart Policies**: Automatic recovery
 
-## 📸 Screenshots Required
 
-Please capture and save the following screenshots in the `screenshots/` folder:
 
 1. **Frontend Homepage** - http://localhost:3000
 2. **Backend API Response** - http://localhost:5000/api/health
@@ -205,55 +198,6 @@ This project showcases:
 - ✅ **Resource Management**: Memory limits and restart policies
 - ✅ **Modern Web Development**: Responsive UI with API integration
 
-## 🔧 Troubleshooting
 
-### Common Issues
-
-**Port Already in Use**
-```bash
-# Check port usage
-netstat -tlnp | grep :3000
-netstat -tlnp | grep :5000
-```
-
-**Container Won't Start**
-```bash
-# Check logs
-docker compose logs backend
-docker compose logs frontend
-
-# Rebuild containers
-docker compose down
-docker compose up --build
-```
-
-**Health Check Failures**
-```bash
-# Check health status
-docker compose ps
-docker compose logs backend
-```
-
-## 📝 Submission Checklist
-
-- [ ] Project builds successfully with `docker compose up --build`
-- [ ] Frontend accessible at http://localhost:3000
-- [ ] Backend API responds at http://localhost:5000
-- [ ] All API endpoints tested and working
-- [ ] Screenshots captured and saved in `screenshots/` folder
-- [ ] Code pushed to GitHub repository
-- [ ] README.md updated with your information
-
-## 🎯 Next Steps
-
-1. **Take Screenshots**: Capture all required screenshots
-2. **Test Thoroughly**: Verify all functionality works
-3. **Push to GitHub**: Commit and push your code
-4. **Document Issues**: Note any problems encountered
-5. **Submit Assignment**: Follow your course submission guidelines
-
----
-
-**Assignment completed successfully! 🎉**
 
 *This project demonstrates proficiency in Docker containerization, multi-service orchestration, and modern web application deployment practices.*
