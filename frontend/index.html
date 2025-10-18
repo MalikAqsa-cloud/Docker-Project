@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Assignment - Full Stack Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .api-section {
+            margin-bottom: 20px;
+        }
+        
+        .api-section h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .loading {
+            display: none;
+            color: #667eea;
+            font-style: italic;
+        }
+        
+        .success {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .error {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-healthy {
+            background: #28a745;
+        }
+        
+        .status-error {
+            background: #dc3545;
+        }
+        
+        .architecture {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .architecture h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .architecture-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .service-box {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .service-box h3 {
+            margin-bottom: 10px;
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            color: white;
+            margin: 0 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .architecture-diagram {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐳 Docker Assignment</h1>
+            <p>Full Stack Application with Flask Backend & Nginx Frontend</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="card">
+                <h2>🔧 API Testing</h2>
+                
+                <div class="api-section">
+                    <h3>Health Check</h3>
+                    <button class="btn" onclick="testHealth()">Test Health</button>
+                    <div class="loading" id="health-loading">Testing health endpoint...</div>
+                    <div class="response" id="health-response"></div>
+                </div>
+                
+                <div class="api-section">
+                    <h3>Greeting API</h3>
+                    <button class="btn" onclick="testGreet()">Greet Default</button>
+                    <button class="btn" onclick="testGreetWithName()">Greet with Name</button>
+                    <div class="loading" id="greet-loading">Testing greet endpoint...</div>
+                    <div class="response" id="greet-response"></div>
+                </div>
+                
+                <div class="api-section">
+                    <h3>Echo API</h3>
+                    <button class="btn" onclick="testEcho()">Test Echo</button>
+                    <div class="loading" id="echo-loading">Testing echo endpoint...</div>
+                    <div class="response" id="echo-response"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📊 Service Status</h2>
+                <div id="service-status">
+                    <p><span class="status-indicator status-healthy"></span>Frontend: Nginx (Port 3000)</p>
+                    <p><span class="status-indicator" id="backend-status"></span>Backend: Flask + Gunicorn (Port 5000)</p>
+                </div>
+                
+                <div class="api-section">
+                    <h3>Service Information</h3>
+                    <button class="btn" onclick="getServiceInfo()">Get Service Info</button>
+                    <div class="loading" id="info-loading">Getting service information...</div>
+                    <div class="response" id="info-response"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="architecture">
+            <h2>🏗️ Architecture Overview</h2>
+            <div class="architecture-diagram">
+                <div class="service-box">
+                    <h3>🌐 Frontend</h3>
+                    <p>Nginx</p>
+                    <p>Port: 3000</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="service-box">
+                    <h3>⚙️ Backend</h3>
+                    <p>Flask + Gunicorn</p>
+                    <p>Port: 5000</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 20px; color: #666;">
+                Docker Compose orchestrates both services with health checks and proper networking
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api';
+        
+        function showLoading(elementId) {
+            document.getElementById(elementId).style.display = 'block';
+        }
+        
+        function hideLoading(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+        
+        function showResponse(elementId, data, isError = false) {
+            const responseDiv = document.getElementById(elementId);
+            responseDiv.textContent = JSON.stringify(data, null, 2);
+            responseDiv.className = `response ${isError ? 'error' : 'success'}`;
+        }
+        
+        async function testHealth() {
+            showLoading('health-loading');
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                hideLoading('health-loading');
+                showResponse('health-response', data);
+                updateBackendStatus(true);
+            } catch (error) {
+                hideLoading('health-loading');
+                showResponse('health-response', { error: error.message }, true);
+                updateBackendStatus(false);
+            }
+        }
+        
+        async function testGreet() {
+            showLoading('greet-loading');
+            try {
+                const response = await fetch(`${API_BASE_URL}/greet`);
+                const data = await response.json();
+                hideLoading('greet-loading');
+                showResponse('greet-response', data);
+            } catch (error) {
+                hideLoading('greet-loading');
+                showResponse('greet-response', { error: error.message }, true);
+            }
+        }
+        
+        async function testGreetWithName() {
+            showLoading('greet-loading');
+            try {
+                const response = await fetch(`${API_BASE_URL}/greet?name=Docker`);
+                const data = await response.json();
+                hideLoading('greet-loading');
+                showResponse('greet-response', data);
+            } catch (error) {
+                hideLoading('greet-loading');
+                showResponse('greet-response', { error: error.message }, true);
+            }
+        }
+        
+        async function testEcho() {
+            showLoading('echo-loading');
+            try {
+                const response = await fetch(`${API_BASE_URL}/echo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'Hello from Docker Assignment!',
+                        timestamp: new Date().toISOString(),
+                        test: true
+                    })
+                });
+                const data = await response.json();
+                hideLoading('echo-loading');
+                showResponse('echo-response', data);
+            } catch (error) {
+                hideLoading('echo-loading');
+                showResponse('echo-response', { error: error.message }, true);
+            }
+        }
+        
+        async function getServiceInfo() {
+            showLoading('info-loading');
+            try {
+                const response = await fetch(`${API_BASE_URL}/info`);
+                const data = await response.json();
+                hideLoading('info-loading');
+                showResponse('info-response', data);
+            } catch (error) {
+                hideLoading('info-loading');
+                showResponse('info-response', { error: error.message }, true);
+            }
+        }
+        
+        function updateBackendStatus(isHealthy) {
+            const statusElement = document.getElementById('backend-status');
+            statusElement.className = `status-indicator ${isHealthy ? 'status-healthy' : 'status-error'}`;
+        }
+        
+        // Test health on page load
+        window.onload = function() {
+            testHealth();
+        };
+    </script>
+</body>
+</html>
